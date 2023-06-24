@@ -2,3 +2,4 @@ tk
 tensorflow~=2.12.0
 scikit-learn~=1.2.2
 keras~=2.12.0
+matplotlib~=3.7.1

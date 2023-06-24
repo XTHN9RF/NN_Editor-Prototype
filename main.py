@@ -1,9 +1,11 @@
 import tkinter
 
 from model import model
-from dataset import test, accuracy_scale
+from dataset import test, accuracy_scale, epochs
 import tkinter as tk
 from tkinter import simpledialog
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 
 window = tk.Tk()
 
@@ -15,6 +17,23 @@ test_result_screen = tk.Frame(window)
 back_button = tk.Button(text="Назад", command=lambda: main_screen_show())
 back_button.config(relief=tk.RAISED, bd=3, padx=10, pady=5, bg="red", fg="white", font=("Arial", 12), width=30)
 back_button.config(activebackground="green", activeforeground="white", highlightcolor="blue", highlightthickness=3)
+
+
+def accuracy_scale_graph():
+    train_acc_values, val_acc_values = accuracy_scale()
+    fig = plt.figure(figsize=(6, 4))
+    ax = fig.add_subplot(111)
+    ax.plot(range(1, epochs + 1), train_acc_values, label='Точність навчання')
+    ax.plot(range(1, epochs + 1), val_acc_values, label='Точність перевірки')
+    ax.set_xlabel('Епоха')
+    ax.set_ylabel('Точність')
+    ax.set_title('Точність навчання та перевірки')
+    ax.legend()
+
+    canvas = FigureCanvasTkAgg(fig, master=accuracy_screen)
+    canvas.draw()
+
+    canvas.get_tk_widget().pack(side=tk.LEFT, padx=10, pady=10)
 
 
 def main_screen_show():
@@ -38,6 +57,8 @@ def accuracy_screen_show():
     edit_network_screen.pack_forget()
     test_result_screen.pack_forget()
     accuracy_screen.pack()
+    back_button.pack(pady=10)
+    accuracy_scale_graph()
 
 
 def test_result_screen_show():
@@ -62,7 +83,8 @@ def main():
 
     # Main menu buttons
     test_button = tk.Button(main_screen, text="Тестувати нейронну мережу", command=lambda: test_result_screen_show())
-    accuracy_button = tk.Button(main_screen, text="Оцінка точності передбачення", command=lambda: accuracy_scale())
+    accuracy_button = tk.Button(main_screen, text="Оцінка точності передбачення",
+                                command=lambda: accuracy_screen_show())
     get_config_button = tk.Button(main_screen, text="Переглянути конфігурацію мережі",
                                   command=lambda: tk.simpledialog.messagebox.showinfo("Конфігурація мережі",
                                                                                       model.get_config()))
@@ -102,7 +124,7 @@ def main():
 
     for button in buttons:
         button.config(relief=tk.RAISED, bd=3, padx=10, pady=5, bg="blue", fg="white", font=("Arial", 12), width=30)
-    button.config(activebackground="green", activeforeground="white", highlightcolor="blue", highlightthickness=3)
+        button.config(activebackground="green", activeforeground="white", highlightcolor="blue", highlightthickness=3)
 
     # Packing main screen buttons
     test_button.pack(pady=10)

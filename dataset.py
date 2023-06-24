@@ -31,15 +31,14 @@ train_dataset = train_dataset.shuffle(buffer_size=1024).batch(batch_size)
 val_dataset = tf.data.Dataset.from_tensor_slices((X_val, Y_val))
 val_dataset = val_dataset.batch(batch_size)
 
+epochs = 5
+
 
 def accuracy_scale():
-    epochs = 5
+    train_acc_values = []
+    val_acc_values = []
 
     for epoch in range(epochs):
-
-        print("\n")
-        print(f"Epoch : {epoch + 1}")
-
         for step, (X_train, Y_train) in enumerate(train_dataset):
             # Iterate over the batches of the train dataset
 
@@ -57,15 +56,8 @@ def accuracy_scale():
             # Update training accuracy metric
             train_acc_metric(Y_train, logits)
 
-            # Print Log of loss value at every 5th step
-            if step % 5 == 0:
-                print(f"Training Loss at step {step} : {loss_value:.3f}")
-
-        print()
-
-        # Print training accuracy at the end of each epoch
         train_acc = train_acc_metric.result()
-        print(f"Training Accuracy   : {train_acc:.3f}")
+        train_acc_values.append(train_acc)
         # Reset training metrics at the end of each epoch
         train_acc_metric.reset_states()
 
@@ -78,12 +70,12 @@ def accuracy_scale():
         val_acc = val_acc_metric.result()
         # Reset validation metric
         val_acc_metric.reset_states()
-        print(f"Validation Accuracy : {val_acc:.3f}")
+        val_acc_values.append(val_acc)
+
+    return train_acc_values, val_acc_values
 
 
 def training():
-    epochs = 5
-
     for epoch in range(epochs):
 
         for step, (X_train, Y_train) in enumerate(train_dataset):
