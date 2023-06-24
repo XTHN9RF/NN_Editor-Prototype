@@ -93,9 +93,16 @@ def layer_units_setter():
 
 def main():
     main_screen_show()
-    window.geometry("500x500")
+    screen_width = window.winfo_screenwidth()
+    screen_height = window.winfo_screenheight()
+
+    window_width = 500
+    window_height = 500
+    x = (screen_width - window_width) // 2
+    y = (screen_height - window_height) // 2
+    window.geometry(f"{window_width}x{window_height}+{x}+{y}")
     window.title("Прототип редактора нейронної мережі")
-    # window.resizable(False, False)
+    window.resizable(False, False)
 
     # Main menu buttons
     test_button = tk.Button(main_screen, text="Тестувати нейронну мережу", command=lambda: test_result_screen_show())
