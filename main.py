@@ -52,29 +52,30 @@ def main():
     main_screen_show()
     window.geometry("500x500")
     window.title("Прототип редактора нейронної мережі")
-    window.resizable(False, False)
+    # window.resizable(False, False)
 
     # Main menu buttons
     test_button = tk.Button(main_screen, text="Тестувати нейронну мережу", command=lambda: test_result_screen_show())
     accuracy_button = tk.Button(main_screen, text="Оцінка точності передбачення", command=lambda: accuracy_scale())
     get_config_button = tk.Button(main_screen, text="Переглянути конфігурацію мережі",
-                                  command=lambda: print(model.get_config()))
+                                  command=lambda: tk.simpledialog.messagebox.showinfo("Конфігурація мережі",
+                                                                                      model.get_config()))
     edit_network_button = tk.Button(main_screen, text="Редагувати нейронну мережу", command=lambda: edit_network_show())
 
     # Edit network buttons
     add_layer_button = tk.Button(edit_network_screen, text="Додати шар",
                                  command=lambda: model.add_layer(
-                                     simpledialog.askinteger("Додати шар", "Введіть число нейронів(до 50):") or 1))
+                                     simpledialog.askinteger("Додати шар", "Введіть число нейронів(до 50):") or None))
     get_layer_button = tk.Button(edit_network_screen, text="Переглянути шар",
                                  command=lambda: print(model.get_layer(
-                                     simpledialog.askinteger("Переглянути шар", "Введіть номер шару:") or 0)))
+                                     simpledialog.askinteger("Переглянути шар", "Введіть номер шару:") or None)))
     delete_layer_button = tk.Button(edit_network_screen, text="Видалити шар",
                                     command=lambda: model.remove_layer(
-                                        simpledialog.askinteger("Видалити шар", "Введіть номер шару:") or 0))
+                                        simpledialog.askinteger("Видалити шар", "Введіть номер шару:") or None))
     set_dropout_rate_button = tk.Button(edit_network_screen, text="Встановити швидкість відпадання",
                                         command=lambda: model.set_dropout_rate(
                                             simpledialog.askfloat("Встановити швидкість відпадання",
-                                                                  "Введіть швидкість відпадання:") or 0.2))
+                                                                  "Введіть швидкість відпадання:") or None))
 
     # Test result screen
     test_result_label = tk.Label(test_result_screen, text="Результат тестування:")

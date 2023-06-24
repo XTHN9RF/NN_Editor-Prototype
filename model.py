@@ -1,4 +1,6 @@
 import tensorflow as tf
+import tkinter as tk
+import tkinter.simpledialog
 
 
 class DenseLayer(tf.keras.layers.Layer):
@@ -58,47 +60,68 @@ class CustomModel(tf.keras.Model):
     def set_dropout_rate(self, dropout_rate):
         """Method that sets the dropout rate."""
         self.dropout_rate = dropout_rate
+        if dropout_rate is None:
+            return
         if self.dropout_rate < 0 or self.dropout_rate > 1:
             self.dropout_rate = 0.2
+            tk.simpledialog.messagebox.showerror("Неправильно введені дані",
+                                                 "Відновлення значення за замовчуванням, введені дані мають бути в межах від 0 до 1")
         self.dropout = tf.keras.layers.Dropout(self.dropout_rate)
 
     def set_layer_units(self, layer_index, units):
         """Method that sets the units of a participate layer."""
+        if units is None:
+            return
+        if units <= 0:
+            tk.simpledialog.messagebox.showerror("Помилка", "Введіть кількість, більшу за нуль")
+            return
         self.custom_layers[layer_index] = DenseLayer(units)
-
-    def get_layer_units(self, layer_index):
-        """Method that gets the units of a participate layer."""
-        return self.custom_layers[layer_index].units
 
     def add_layer(self, units):
         """Method that adds a layer to the model."""
         input_units = self.custom_layers[-1].units if self.custom_layers else 50
+        if units is None:
+            return
+        if units <= 0:
+            tk.simpledialog.messagebox.showerror("Помилка", "Введіть кількість, більшу за нуль")
+            return
         output_units = units
 
         if self.custom_layers:
             if self.custom_layers[-1].units != input_units:
-                raise ValueError("Несумісні розміри вхідного та вихідного шарів")
+                tk.simpledialog.messagebox.showerror("Несумісні розміри вхідного та вихідного шарів")
 
         self.custom_layers.append(DenseLayer(units))
         self.output_layer = DenseLayer(self.output_units)
+        self.num_layers = len(self.custom_layers)
 
     def remove_layer(self, layer_index):
         """Method that removes a layer from the model."""
+        if layer_index is None:
+            return
+        if layer_index < 0 or layer_index > self.num_layers:
+            tk.simpledialog.messagebox.showerror("Помилка", "Шару не існує, введіть коректний номер")
+            return
         if layer_index == self.num_layers - 1:
             self.output_layer = DenseLayer(self.custom_layers[-2].units)
-        self.custom_layers.pop(layer_index)
+        self.custom_layers.pop(layer_index - 1)
         self.num_layers -= 1
 
     def get_layer(self, index=None):
         """Method that returns a participate layer."""
-        if index is None or index == self.num_layers:
+        if index is None:
+            return
+        if index == self.num_layers:
             return self.output_layer.get_config()
+        if index < 0 or index > self.num_layers:
+            tk.simpledialog.messagebox.showerror("Помилка", "Шару не існує, введіть коректний номер")
+            return
         return self.custom_layers[index].get_config()
 
     def get_config(self):
         """Method that returns the configuration of the model."""
         return {
-            "Кількість шарів": len(self.custom_layers),
+            "Кількість шарів": self.num_layers,
             "Швидкість відпадання": self.dropout_rate,
             "Кількість нейронів вихідного шару": self.output_units
         }
