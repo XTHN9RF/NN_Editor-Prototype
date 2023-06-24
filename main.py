@@ -12,12 +12,17 @@ main_screen = tk.Frame(window)
 accuracy_screen = tk.Frame(window)
 test_result_screen = tk.Frame(window)
 
+back_button = tk.Button(text="Назад", command=lambda: main_screen_show())
+back_button.config(relief=tk.RAISED, bd=3, padx=10, pady=5, bg="red", fg="white", font=("Arial", 12), width=30)
+back_button.config(activebackground="green", activeforeground="white", highlightcolor="blue", highlightthickness=3)
+
 
 def main_screen_show():
     main_screen.pack()
     edit_network_screen.pack_forget()
     accuracy_screen.pack_forget()
     test_result_screen.pack_forget()
+    back_button.pack_forget()
 
 
 def edit_network_show():
@@ -25,6 +30,7 @@ def edit_network_show():
     edit_network_screen.pack()
     accuracy_screen.pack_forget()
     test_result_screen.pack_forget()
+    back_button.pack(pady=10)
 
 
 def accuracy_screen_show():
@@ -39,6 +45,7 @@ def test_result_screen_show():
     edit_network_screen.pack_forget()
     accuracy_screen.pack_forget()
     test_result_screen.pack()
+    back_button.pack(pady=10)
 
 
 def main():
@@ -70,7 +77,6 @@ def main():
                                                                   "Введіть швидкість відпадання:") or 0.2))
 
     # Test result screen
-    back_button = tk.Button(test_result_screen, text="Назад", command=lambda: main_screen_show())
     test_result_label = tk.Label(test_result_screen, text="Результат тестування:")
     test_result_label.config(font=("Arial", 14))
     test_result_label.pack(pady=10)
@@ -80,7 +86,7 @@ def main():
 
     # Setting style for buttons
     buttons = (test_button, accuracy_button, add_layer_button, get_config_button, get_layer_button,
-               delete_layer_button, set_dropout_rate_button, edit_network_button, back_button)
+               delete_layer_button, set_dropout_rate_button, edit_network_button)
 
     for button in buttons:
         button.config(relief=tk.RAISED, bd=3, padx=10, pady=5, bg="blue", fg="white", font=("Arial", 12), width=30)
@@ -97,9 +103,6 @@ def main():
     get_layer_button.pack(pady=10)
     delete_layer_button.pack(pady=10)
     set_dropout_rate_button.pack(pady=10)
-
-    # Packing test result screen buttons
-    back_button.pack(pady=10)
 
     # Loop program to run without closing automatically
     window.mainloop()
