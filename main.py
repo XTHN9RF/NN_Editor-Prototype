@@ -19,6 +19,22 @@ back_button.config(relief=tk.RAISED, bd=3, padx=10, pady=5, bg="red", fg="white"
 back_button.config(activebackground="green", activeforeground="white", highlightcolor="blue", highlightthickness=3)
 
 
+def display_correct_result():
+    data = {
+        "[5.8 2.7 3.9 1.2]": "Iris versicolor",
+        "[4.7 3.2 1.6 0.2]": "Iris setosa",
+        "[7.7 2.6 6.9 2.3]": "Iris virginica",
+        "[4.8 3 1.4 0.1]": "Iris setosa",
+        "[6.7 2.5 5.8 1.8]": "Iris virginica",
+    }
+    answers = []
+
+    for key, value in data.items():
+        answers.append(value)
+
+    simpledialog.messagebox.showinfo("Правильні відповіді", "\n".join(answers))
+
+
 def accuracy_scale_graph():
     train_acc_values, val_acc_values = accuracy_scale()
     fig = plt.figure(figsize=(6, 4))
@@ -117,10 +133,13 @@ def main():
     test_result = tk.Message(test_result_screen, text=test())
     test_result.config(width=500, font=("Arial", 16))
     test_result.pack(pady=10)
+    check_correct_answers_button = tk.Button(test_result_screen, text="Перевірити правильність відповідей",
+                                             command=lambda: display_correct_result())
 
     # Setting style for buttons
     buttons = (test_button, accuracy_button, add_layer_button, get_config_button, get_layer_button,
-               delete_layer_button, set_dropout_rate_button, edit_network_button, set_layer_units_button)
+               delete_layer_button, set_dropout_rate_button, edit_network_button, set_layer_units_button,
+               check_correct_answers_button)
 
     for button in buttons:
         button.config(relief=tk.RAISED, bd=3, padx=10, pady=5, bg="blue", fg="white", font=("Arial", 12), width=30)
@@ -138,6 +157,9 @@ def main():
     delete_layer_button.pack(pady=10)
     set_dropout_rate_button.pack(pady=10)
     set_layer_units_button.pack(pady=10)
+
+    # Packing test result screen buttons
+    check_correct_answers_button.pack(pady=10)
 
     # Loop program to run without closing automatically
     window.mainloop()
