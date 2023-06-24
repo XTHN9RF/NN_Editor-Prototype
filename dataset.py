@@ -137,5 +137,9 @@ def test():
     predicted_class = tf.argmax(test_probabilities, 1)
     predicted_class_label = tf.gather(Class_Label, predicted_class)
 
+    result = []
+
     for ex, pred in zip(test_dataset, predicted_class_label):
-        tf.print(ex, pred)
+        result.append(f"Пeредбачення : {pred} \n Вхідний масив {ex}")
+        result.append("\n")
+    return "".join(result)
