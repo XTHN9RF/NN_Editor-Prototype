@@ -26,7 +26,7 @@ class DenseLayer(tf.keras.layers.Layer):
 
     def get_config(self):
         """Method that returns the configuration of the layer."""
-        return {"units": self.units}
+        return {"Кількість нейронів": self.units}
 
 
 class CustomModel(tf.keras.Model):

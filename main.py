@@ -71,10 +71,13 @@ def main():
     # Edit network buttons
     add_layer_button = tk.Button(edit_network_screen, text="Додати шар",
                                  command=lambda: model.add_layer(
-                                     simpledialog.askinteger("Додати шар", "Введіть число нейронів(до 50):") or None))
+                                     simpledialog.askinteger("Додати шар", "Введіть число нейронів:") or None))
     get_layer_button = tk.Button(edit_network_screen, text="Переглянути шар",
-                                 command=lambda: print(model.get_layer(
-                                     simpledialog.askinteger("Переглянути шар", "Введіть номер шару:") or None)))
+                                 command=lambda: simpledialog.messagebox.showinfo("Кількість нейронів вибраного шару",
+                                                                                  (model.get_layer(
+                                                                                      simpledialog.askinteger(
+                                                                                          "Переглянути шар",
+                                                                                          "Введіть номер шару:") or None))))
     delete_layer_button = tk.Button(edit_network_screen, text="Видалити шар",
                                     command=lambda: model.remove_layer(
                                         simpledialog.askinteger("Видалити шар", "Введіть номер шару:") or None))
@@ -99,7 +102,7 @@ def main():
 
     for button in buttons:
         button.config(relief=tk.RAISED, bd=3, padx=10, pady=5, bg="blue", fg="white", font=("Arial", 12), width=30)
-        button.config(activebackground="green", activeforeground="white", highlightcolor="blue", highlightthickness=3)
+    button.config(activebackground="green", activeforeground="white", highlightcolor="blue", highlightthickness=3)
 
     # Packing main screen buttons
     test_button.pack(pady=10)
