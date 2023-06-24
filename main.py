@@ -19,8 +19,16 @@ def main():
     get_layer_button = tk.Button(window, text="Переглянути шар",
                                  command=lambda: print(model.get_layer(
                                      simpledialog.askinteger("Переглянути шар", "Введіть номер шару:") or 0)))
+    delete_layer_button = tk.Button(window, text="Видалити шар",
+                                    command=lambda: model.remove_layer(
+                                        simpledialog.askinteger("Видалити шар", "Введіть номер шару:") or 0))
+    set_dropout_rate_button = tk.Button(window, text="Встановити швидкість відпадання",
+                                        command=lambda: model.set_dropout_rate(
+                                            simpledialog.askfloat("Встановити швидкість відпадання",
+                                                                  "Введіть швидкість відпадання:") or 0.2))
 
-    for button in (test_button, accuracy_button, add_layer_button, get_config_button, get_layer_button):
+    for button in (test_button, accuracy_button, add_layer_button, get_config_button, get_layer_button,
+                   delete_layer_button, set_dropout_rate_button):
         button.config(relief=tk.RAISED, bd=3, padx=10, pady=5, bg="blue", fg="white", font=("Arial", 12), width=30)
         button.config(activebackground="green", activeforeground="white", highlightcolor="blue", highlightthickness=3)
 
@@ -29,6 +37,8 @@ def main():
     add_layer_button.pack(pady=10)
     get_config_button.pack(pady=10)
     get_layer_button.pack(pady=10)
+    delete_layer_button.pack(pady=10)
+    set_dropout_rate_button.pack(pady=10)
 
     window.mainloop()
 

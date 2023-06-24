@@ -58,7 +58,9 @@ class CustomModel(tf.keras.Model):
     def set_dropout_rate(self, dropout_rate):
         """Method that sets the dropout rate."""
         self.dropout_rate = dropout_rate
-        self.dropout = tf.keras.layers.Dropout(dropout_rate)
+        if self.dropout_rate < 0 or self.dropout_rate > 1:
+            self.dropout_rate = 0.2
+        self.dropout = tf.keras.layers.Dropout(self.dropout_rate)
 
     def set_layer_units(self, layer_index, units):
         """Method that sets the units of a participate layer."""
@@ -75,7 +77,7 @@ class CustomModel(tf.keras.Model):
 
         if self.custom_layers:
             if self.custom_layers[-1].units != input_units:
-                raise ValueError("Incompatible number of units in the previous layer.")
+                raise ValueError("Несумісні розміри вхідного та вихідного шарів")
 
         self.custom_layers.append(DenseLayer(units))
         self.output_layer = DenseLayer(self.output_units)
@@ -96,9 +98,9 @@ class CustomModel(tf.keras.Model):
     def get_config(self):
         """Method that returns the configuration of the model."""
         return {
-            "count of layers": len(self.custom_layers),
-            "dropout rate": self.dropout_rate,
-            "output layer units": self.output_units
+            "Кількість шарів": len(self.custom_layers),
+            "Швидкість відпадання": self.dropout_rate,
+            "Кількість нейронів вихідного шару": self.output_units
         }
 
 
