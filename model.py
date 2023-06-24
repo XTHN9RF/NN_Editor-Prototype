@@ -70,12 +70,24 @@ class CustomModel(tf.keras.Model):
 
     def set_layer_units(self, layer_index, units):
         """Method that sets the units of a participate layer."""
-        if units is None:
+        input_units = self.custom_layers[-1].units if self.custom_layers else 50
+        if layer_index is None:
             return
+        if layer_index - 1 < 0 or layer_index - 1 > self.num_layers:
+            tk.simpledialog.messagebox.showerror("Помилка", "Шару не існує, введіть коректний номер")
+            return
+        if layer_index - 1 == 1:
+            if self.custom_layers[0].units != input_units:
+                tk.simpledialog.messagebox.showerror("Несумісні розміри вхідного та вихідного шарів")
+                return
+            if units is None:
+                return
         if units <= 0:
             tk.simpledialog.messagebox.showerror("Помилка", "Введіть кількість, більшу за нуль")
             return
-        self.custom_layers[layer_index] = DenseLayer(units)
+        output_units = units
+        self.custom_layers[layer_index - 1] = DenseLayer(units)
+        self.output_layer = DenseLayer(self.output_units)
 
     def add_layer(self, units):
         """Method that adds a layer to the model."""
@@ -111,12 +123,12 @@ class CustomModel(tf.keras.Model):
         """Method that returns a participate layer."""
         if index is None:
             return
-        if index == self.num_layers:
+        if index == 0:
             return self.output_layer.get_config()
         if index < 0 or index > self.num_layers:
             tk.simpledialog.messagebox.showerror("Помилка", "Шару не існує, введіть коректний номер")
             return
-        return self.custom_layers[index].get_config()
+        return self.custom_layers[index - 1].get_config()
 
     def get_config(self):
         """Method that returns the configuration of the model."""
@@ -127,4 +139,4 @@ class CustomModel(tf.keras.Model):
         }
 
 
-model = CustomModel(0, 0.2, 3)
+model = CustomModel(1, 0.2, 3)

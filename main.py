@@ -48,6 +48,12 @@ def test_result_screen_show():
     back_button.pack(pady=10)
 
 
+def layer_units_setter():
+    layer_index = simpledialog.askinteger("Номер шару", "Введіть номер шару") or None
+    layer_units = simpledialog.askinteger("Кількість нейронів", "Введіть кількість нейронів у шарі") or None
+    model.set_layer_units(layer_index, layer_units)
+
+
 def main():
     main_screen_show()
     window.geometry("500x500")
@@ -76,6 +82,8 @@ def main():
                                         command=lambda: model.set_dropout_rate(
                                             simpledialog.askfloat("Встановити швидкість відпадання",
                                                                   "Введіть швидкість відпадання:") or None))
+    set_layer_units_button = tk.Button(edit_network_screen, text="Встановити кількість нейронів",
+                                       command=lambda: layer_units_setter())
 
     # Test result screen
     test_result_label = tk.Label(test_result_screen, text="Результат тестування:")
@@ -87,7 +95,7 @@ def main():
 
     # Setting style for buttons
     buttons = (test_button, accuracy_button, add_layer_button, get_config_button, get_layer_button,
-               delete_layer_button, set_dropout_rate_button, edit_network_button)
+               delete_layer_button, set_dropout_rate_button, edit_network_button, set_layer_units_button)
 
     for button in buttons:
         button.config(relief=tk.RAISED, bd=3, padx=10, pady=5, bg="blue", fg="white", font=("Arial", 12), width=30)
@@ -104,6 +112,7 @@ def main():
     get_layer_button.pack(pady=10)
     delete_layer_button.pack(pady=10)
     set_dropout_rate_button.pack(pady=10)
+    set_layer_units_button.pack(pady=10)
 
     # Loop program to run without closing automatically
     window.mainloop()
